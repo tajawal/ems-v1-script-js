@@ -11,10 +11,9 @@ const vm = require('vm');
  */
 const executeScript = async (request, reply) => {
     try {
-        console.log("bbbbbbbb");
         var contextVariables = { util};
         contextVariables = mergeRequestData(contextVariables, request);
-        console.log(contextVariables);
+        console.debug(contextVariables);
         vm.createContext(contextVariables);
         vm.runInContext(request.body.inputScript, contextVariables);
 
