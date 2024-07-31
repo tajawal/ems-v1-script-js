@@ -3,34 +3,57 @@ const HttpStatus = require('http-status-codes/index');
 const util = require('util');
 const vm = require('vm');
 
+
 /**
  *
  * @param request
  * @param reply
  */
-const executeOne = async (request, reply) => {
+const executeScript = async (request, reply) => {
     try {
-        // Defining Context object
-        const contextobj = { count: 8 }
+        console.log("bbbbbbbb");
+        var contextVariables = { util};
+        contextVariables = mergeRequestData(contextVariables, request);
+        console.log(contextVariables);
+        vm.createContext(contextVariables);
+        vm.runInContext(request.body.inputScript, contextVariables);
 
-// Contextifying stated object
-// using createContext method
-        vm.createContext(contextobj);
 
-// Compiling code by using runInContext
-// method with its parameter
-        vm.runInContext('count *= 4;', contextobj);
+        const extractedMap = new Map();
+        let responseVariables = request.body.response;
+        responseVariables.forEach(key => {
+            if (key in contextVariables) {
+                extractedMap.set(key, contextVariables[key]);
+            }
+        });
 
-// Displays output
-        console.log("The output is: ", contextobj);
-        reply.code(HttpStatus.OK).header('Content-Type', 'application/json').send(JSON.stringify(contextobj));
+        const resultObject = mapToObject(extractedMap);
+        console.debug(resultObject);
+        reply.code(HttpStatus.OK)
+            .header('Content-Type', 'application/json')
+            .send(JSON.stringify(resultObject));
     } catch  (e) {
-        request.log.error(e);
+        console.debug(e.message);
         return Boom.boomify(e);
     }
 };
 
 
+function mergeRequestData(contextVaribales, requestData) {
+    let requestVariables = requestData.body.map;
+    if (Array.isArray(requestVariables) && requestVariables.length > 0) {
+        requestVariables.forEach(item => {
+            if (typeof item === 'object' && item !== null) {
+                contextVaribales = { ...contextVaribales, ...item };
+            }
+        });
+    }
+    return contextVaribales;
+}
 
-module.exports = { executeOne };
+const mapToObject = (map) => {
+    return Object.fromEntries(map);
+};
+
+module.exports = { executeOne: executeScript };
 

@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const { logInfoDetails, logErrDetails } = require('../helper/logger');
 
 /**
@@ -7,17 +6,8 @@ const { logInfoDetails, logErrDetails } = require('../helper/logger');
  */
 function errorHandler(err) {
   disconnectMongo();
-  logErrDetails( { error: err, message: 'Error occurred in student-api-boilerplate' } );
+  logErrDetails( { error: err, message: 'Error occurred in script-api-boilerplate' } );
 }
-
-/**
- * Gracefully closes the MongoDB connection
- */
-const disconnectMongo = () => {
-  mongoose.connection.close(function () {
-    logInfoDetails( { message: 'Mongoose default connection disconnected through app termination' });
-  });
-};
 
 /**
  * Makes sure that the process doesn't shut down
@@ -35,12 +25,10 @@ const handleUncaughtErrors = () => {
 const handleExit = () => {
   // If the Node process ends, close the Mongoose connection
   process.on('SIGINT', () => {
-    disconnectMongo();
     process.exit(0);
   });
 
   process.on('exit', () => {
-    disconnectMongo();
     process.exit(0);
   });
 };

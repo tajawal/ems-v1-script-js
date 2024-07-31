@@ -8,7 +8,7 @@ module.exports = () => {
     return [
         {
             method: 'POST',
-            url: '/script/exe',
+            url: '/script/execute',
             schema: schema.executeOne,
             handler: controller.executeOne
         }

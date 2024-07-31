@@ -1,8 +1,5 @@
 const cors = require('cors');
 const { config } = require('./helper/config');
-const { dbService } = require('./helper/mongo.db');
-const { infoRoutesMiddleware } = require('./routes/info');
-const { initiateRabbitMQ } = require('./queues/connection/rabbitmq');
 const { v1RoutesMiddleware } = require('./routes');
 const { handleExit, handleUncaughtErrors } = require('./helper/fatal');
 
@@ -19,20 +16,12 @@ module.exports = fastify;
         handleExit();
         handleUncaughtErrors();
 
-        // Connect to DB
-        if (process.env.NODE_ENV !== 'test') {
-            await dbService();
-
-            // queue listener
-            // initiateRabbitMQ();
-        }
 
         // Middlewares
         fastify.use(cors());
 
         // Plugins
         fastify.register(require('fastify-boom'));
-        fastify.register(infoRoutesMiddleware);
         fastify.register(v1RoutesMiddleware, { prefix: '/v1' });
 
         // Server

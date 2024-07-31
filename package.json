@@ -27,7 +27,6 @@
     "cors": "^2.8.4",
     "fastify": "^2.10.0",
     "http-status-codes": "^1.3.2",
-    "mongoose": "^5.4.15",
     "nodemon": "^1.17.3",
     "amqplib": "0.5.3",
     "fastify-boom": "^0.1.0"
