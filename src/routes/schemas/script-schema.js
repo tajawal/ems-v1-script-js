@@ -11,15 +11,6 @@ const scriptCreateSchema = {
     required: ['inputScript']
 };
 
-// const studentUpdateSchema = {
-//     type: 'object',
-//     properties: {
-//         firstName: { type: 'string', example: 'Danish' },
-//         middleName: { type: 'string', example: 'Muhammad' },
-//         lastName: { type: 'string', example: 'Siddiq' }
-//     },
-//     required: ['firstName', 'lastName']
-// };
 
 module.exports = {
     executeOne: {

@@ -9,21 +9,21 @@ const vm = require('vm');
  * @param request
  * @param reply
  */
-const executeOne = async (request, reply) => {
-
+const executeScript = async (request, reply) => {
     try {
-        var contextVaribales = { util};
-        contextVaribales = mergeRequestData(contextVaribales, request);
-        console.log(contextVaribales);
-        vm.createContext(contextVaribales);
-        vm.runInContext(request.body.inputScript, contextVaribales);
+        console.log("bbbbbbbb");
+        var contextVariables = { util};
+        contextVariables = mergeRequestData(contextVariables, request);
+        console.log(contextVariables);
+        vm.createContext(contextVariables);
+        vm.runInContext(request.body.inputScript, contextVariables);
 
 
         const extractedMap = new Map();
         let responseVariables = request.body.response;
         responseVariables.forEach(key => {
-            if (key in contextVaribales) {
-                extractedMap.set(key, contextVaribales[key]);
+            if (key in contextVariables) {
+                extractedMap.set(key, contextVariables[key]);
             }
         });
 
@@ -55,5 +55,5 @@ const mapToObject = (map) => {
     return Object.fromEntries(map);
 };
 
-module.exports = { executeOne };
+module.exports = { executeOne: executeScript };
 
