@@ -1,0 +1,13 @@
+#Component Details ##
+Component: ems
+SubComponent: script-js
+
+## Secrets ##
+secret_variable:
+  enabled: true
+  data:
+    - SECRET_AES_KEY
+
+## Probes ##
+readinessProbePath: /ping
+livenessProbePath: /health

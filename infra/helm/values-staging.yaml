@@ -1,0 +1,33 @@
+#Scaling Parameters
+hpa:
+  enabled: true
+  targetCPUUtilizationPercentage: 70
+  TargetAvgMemoryUtilization: 70
+replicaCount: 1
+maxReplicas: 2
+
+## Resource Limits ##
+resources:
+ limits:
+   cpu: "2"
+   memory: 2Gi
+ requests:
+   cpu: "0.5"
+   memory: 1Gi
+
+## Ingress Configuration ##
+ingress_internal:
+  enabled: true
+  hosts:
+    ems-script-js.tajawal-staging.internal:
+      - /
+
+## Envrionemnt Variables and configmap"
+environment_variable:
+  enabled: true
+  data:
+    APP : "ems-script-js-staging"
+    LOG_LEVEL: "info"
+    LOG_FORMAT: "json"
+    API_HTTP_PORT: "80"
+    API_ENV: "staging"
