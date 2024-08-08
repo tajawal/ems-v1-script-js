@@ -1,6 +1,6 @@
 #Component Details ##
 Component: ems
-SubComponent: script-js
+SubComponent: v1-script-js
 
 ## Secrets ##
 secret_variable:

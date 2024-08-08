@@ -19,14 +19,14 @@ resources:
 ingress_internal:
   enabled: true
   hosts:
-    ems-script-js.tajawal-staging.internal:
+    ems-v1-script-js.tajawal-staging.internal:
       - /
 
 ## Envrionemnt Variables and configmap"
 environment_variable:
   enabled: true
   data:
-    APP : "ems-script-js-staging"
+    APP : "ems-v1-script-js-staging"
     LOG_LEVEL: "info"
     LOG_FORMAT: "json"
     API_HTTP_PORT: "80"
