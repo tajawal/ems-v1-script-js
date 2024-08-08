@@ -15,11 +15,11 @@ const executeScript = async (request, reply) => {
         contextVariables = mergeRequestData(contextVariables, request);
         console.debug(contextVariables);
         vm.createContext(contextVariables);
-        vm.runInContext(request.body.inputScript, contextVariables);
+        vm.runInContext(request.body.script, contextVariables);
 
 
         const extractedMap = new Map();
-        let responseVariables = request.body.response;
+        let responseVariables = request.body.responseKeys;
         responseVariables.forEach(key => {
             if (key in contextVariables) {
                 extractedMap.set(key, contextVariables[key]);
@@ -39,7 +39,7 @@ const executeScript = async (request, reply) => {
 
 
 function mergeRequestData(contextVaribales, requestData) {
-    let requestVariables = requestData.body.map;
+    let requestVariables = requestData.body.input;
     if (Array.isArray(requestVariables) && requestVariables.length > 0) {
         requestVariables.forEach(item => {
             if (typeof item === 'object' && item !== null) {
@@ -50,8 +50,8 @@ function mergeRequestData(contextVaribales, requestData) {
     return contextVaribales;
 }
 
-const mapToObject = (map) => {
-    return Object.fromEntries(map);
+const mapToObject = (input) => {
+    return Object.fromEntries(input);
 };
 
 module.exports = { executeOne: executeScript };
