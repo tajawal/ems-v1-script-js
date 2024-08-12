@@ -6,9 +6,10 @@ const notFoundSchema = require('./common/not-found-schema');
 const scriptCreateSchema = {
     type: 'object',
     properties: {
-        script: { type: 'string', example: 'script to be executed' }
+        scriptCode: { type: 'string', example: 'script to be executed' }
     },
-    required: ['script']
+    required: ['scriptCode']
+
 };
 
 

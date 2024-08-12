@@ -11,15 +11,15 @@ const vm = require('vm');
  */
 const executeScript = async (request, reply) => {
     try {
-        var contextVariables = { util};
+        var contextVariables = { util };
         contextVariables = mergeRequestData(contextVariables, request);
         console.debug(contextVariables);
         vm.createContext(contextVariables);
-        vm.runInContext(request.body.script, contextVariables);
-
+        vm.runInContext(request.body.scriptCode, contextVariables);
 
         const extractedMap = new Map();
-        let responseVariables = request.body.responseKeys;
+        let responseVariables = request.body.requiredOutputFields;
+
         responseVariables.forEach(key => {
             if (key in contextVariables) {
                 extractedMap.set(key, contextVariables[key]);
@@ -39,7 +39,9 @@ const executeScript = async (request, reply) => {
 
 
 function mergeRequestData(contextVaribales, requestData) {
-    let requestVariables = requestData.body.input;
+
+    let requestVariables = requestData.body.scriptInputMap;
+
     if (Array.isArray(requestVariables) && requestVariables.length > 0) {
         requestVariables.forEach(item => {
             if (typeof item === 'object' && item !== null) {
