@@ -19,6 +19,7 @@ const executeScript = async (request, reply) => {
 
         const extractedMap = new Map();
         let responseVariables = request.body.requiredOutputFields;
+
         responseVariables.forEach(key => {
             if (key in contextVariables) {
                 extractedMap.set(key, contextVariables[key]);
@@ -38,7 +39,9 @@ const executeScript = async (request, reply) => {
 
 
 function mergeRequestData(contextVaribales, requestData) {
+
     let requestVariables = requestData.body.scriptInputMap;
+
     if (Array.isArray(requestVariables) && requestVariables.length > 0) {
         requestVariables.forEach(item => {
             if (typeof item === 'object' && item !== null) {
@@ -49,8 +52,8 @@ function mergeRequestData(contextVaribales, requestData) {
     return contextVaribales;
 }
 
-const mapToObject = (map) => {
-    return Object.fromEntries(map);
+const mapToObject = (input) => {
+    return Object.fromEntries(input);
 };
 
 module.exports = { executeOne: executeScript };

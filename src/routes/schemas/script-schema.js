@@ -9,6 +9,7 @@ const scriptCreateSchema = {
         scriptCode: { type: 'string', example: 'script to be executed' }
     },
     required: ['scriptCode']
+
 };
 
 
