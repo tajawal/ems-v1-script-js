@@ -4,7 +4,7 @@ SubComponent: v1-script-js
 
 ## Secrets ##
 secret_variable:
-  enabled: true
+  enabled: false
   data:
     - SECRET_AES_KEY
 
