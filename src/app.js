@@ -19,7 +19,17 @@ module.exports = fastify;
 
         // Middlewares
         fastify.use(cors());
+        // Endpoints to monitor server
 
+        fastify.get('/ping', (req,res)=>{
+            res.send('ok');
+        })
+
+        fastify.get('/health', (req,res)=>{
+            res.send('200');
+        })
+
+        
         // Plugins
         fastify.register(require('fastify-boom'));
         fastify.register(v1RoutesMiddleware, { prefix: '/v1' });
