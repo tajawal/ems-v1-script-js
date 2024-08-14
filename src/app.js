@@ -19,13 +19,23 @@ module.exports = fastify;
 
         // Middlewares
         fastify.use(cors());
+        // Endpoints to monitor server
 
+        fastify.get('/ping', (req,res)=>{
+            res.send('ok');
+        })
+
+        fastify.get('/health', (req,res)=>{
+            res.send('200');
+        })
+
+        
         // Plugins
         fastify.register(require('fastify-boom'));
         fastify.register(v1RoutesMiddleware, { prefix: '/v1' });
 
         // Server
-        await fastify.listen(config.get('NODE_PORT', 6661), '0.0.0.0');
+        await fastify.listen(config.get('API_HTTP_PORT', 80), '0.0.0.0');
         fastify.log.info(
             '%s listening in %s environment',
             config.name,

@@ -13,7 +13,6 @@ const executeScript = async (request, reply) => {
     try {
         var contextVariables = { util };
         contextVariables = mergeRequestData(contextVariables, request);
-        console.debug(contextVariables);
         vm.createContext(contextVariables);
         vm.runInContext(request.body.scriptCode, contextVariables);
 
