@@ -1,11 +1,11 @@
-FROM tajawalcom/node:22.6.0-alpine as builder
+FROM tajawalcom/node:20.15.1-alpine as builder
 
 WORKDIR /app
 COPY package*.json .npmrc ./
 RUN yarn install
 COPY . ./
 
-FROM tajawalcom/node:22.6.0-alpine
+FROM tajawalcom/node:20.15.1-alpine
 WORKDIR /app
 # Copy app source
 COPY --from=builder /app/ ./
