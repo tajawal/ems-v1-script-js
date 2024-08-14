@@ -5,7 +5,7 @@ const { logInfoDetails, logErrDetails } = require('../helper/logger');
  * @param err
  */
 function errorHandler(err) {
-  disconnectMongo();
+ // disconnectMongo();
   logErrDetails( { error: err, message: 'Error occurred in script-api-boilerplate' } );
 }
 

@@ -13,20 +13,33 @@ const executeScript = async (request, reply) => {
     try {
         var contextVariables = { util };
         contextVariables = mergeRequestData(contextVariables, request);
-        console.debug(contextVariables);
         vm.createContext(contextVariables);
         vm.runInContext(request.body.scriptCode, contextVariables);
 
         const extractedMap = new Map();
         let responseVariables = request.body.requiredOutputFields;
+        //
+        // responseVariables.forEach(key => {
+        //     if (key in contextVariables) {
+        //         extractedMap.set(key, contextVariables[key]);
+        //     }
+        // });
 
-        responseVariables.forEach(key => {
-            if (key in contextVariables) {
-                extractedMap.set(key, contextVariables[key]);
-            }
-        });
+        const transformInputToOutput = (outputList, inputMap) => {
+            return inputMap.reduce((acc, key) => {
+                if (key in outputList) {
+                    acc[key] = {
+                        value: outputList[key],
+                        type: typeof outputList[key]
+                    };
+                }
+                return acc;
+            }, {});
+        };
 
-        const resultObject = mapToObject(extractedMap);
+// Transform the input to output
+        const resultObject = transformInputToOutput(responseVariables, contextVariables);
+
         console.debug(resultObject);
         reply.code(HttpStatus.OK)
             .header('Content-Type', 'application/json')
@@ -36,6 +49,7 @@ const executeScript = async (request, reply) => {
         return Boom.boomify(e);
     }
 };
+
 
 
 function mergeRequestData(contextVaribales, requestData) {
