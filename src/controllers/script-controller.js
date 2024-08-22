@@ -1,4 +1,3 @@
-const Boom = require('boom');
 const HttpStatus = require('http-status-codes/index');
 const util = require('util');
 const vm = require('vm');
@@ -16,27 +15,24 @@ const executeScript = async (request, reply) => {
         vm.createContext(contextVariables);
         vm.runInContext(request.body.scriptCode, contextVariables);
 
-        let responseVariables = request.body.requiredOutputFields;
+        let output = contextVariables["output"];
+        const resultList = [];
 
-        const transformInputToOutput = (outputList, inputMap) => {
-            return Array.from(outputList).reduce((acc, key) => {
-                let val = inputMap[key];
-                acc[key] = {
-                    value: val,
-                    type: typeof val
-                };
-                return acc;
-            }, {});
-        };
+        for (const [key, value] of Object.entries(output)) {
+            resultList.push({
+                key: key,
+                value: value,
+                type: typeof value
+            });
+        }
 
-        const resultObject = transformInputToOutput(responseVariables, contextVariables);
-        console.debug(resultObject);
+        console.debug(resultList);
         reply.code(HttpStatus.OK)
             .header('Content-Type', 'application/json')
-            .send(JSON.stringify(resultObject));
+            .send(JSON.stringify(resultList));
     } catch (e) {
-        console.debug(e.message);
-        return Boom.boomify(e);
+        console.error(e.message);
+        throw new Error(e)
     }
 };
 
