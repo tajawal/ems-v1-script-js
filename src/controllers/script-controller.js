@@ -16,8 +16,16 @@ const executeScript = async (request, reply) => {
         vm.runInContext(request.body.scriptCode, contextVariables);
 
         let output = contextVariables["output"];
-        const resultList = [];
 
+        if (typeof output !== "object") {
+            throw new Error("output type is missed, or it should be an object")
+        }
+
+        if (!Object.keys(output).length) {
+            throw new Error("output should have at lest on key")
+        }
+
+        const resultList = [];
         for (const [key, value] of Object.entries(output)) {
             resultList.push({
                 key: key,
