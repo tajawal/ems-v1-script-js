@@ -3,7 +3,6 @@ Fastify framework based backend api for NodeJs application
 
 **Description**
 * fastify framework based backend api application
-* boom for error detailing
 * mongodb database
 * rabbitMQ producer and consumer support - ~~Currently RabbitMQ connection method is commnented while setting up server in app.js~~
 * rabbitMQ auto re-connectivity logic after RabbitMQ is down from application

@@ -1,4 +1,3 @@
-const Boom = require('boom');
 const HttpStatus = require('http-status-codes/index');
 const util = require('util');
 const vm = require('vm');
@@ -11,28 +10,37 @@ const vm = require('vm');
  */
 const executeScript = async (request, reply) => {
     try {
-        var contextVariables = { util };
+        var contextVariables = {util};
         contextVariables = mergeRequestData(contextVariables, request);
         vm.createContext(contextVariables);
         vm.runInContext(request.body.scriptCode, contextVariables);
 
-        const extractedMap = new Map();
-        let responseVariables = request.body.requiredOutputFields;
+        let output = contextVariables["output"];
 
-        responseVariables.forEach(key => {
-            if (key in contextVariables) {
-                extractedMap.set(key, contextVariables[key]);
-            }
-        });
+        if (typeof output !== "object") {
+            throw new Error("output type is missed, or it should be an object")
+        }
 
-        const resultObject = mapToObject(extractedMap);
-        console.debug(resultObject);
+        if (!Object.keys(output).length) {
+            throw new Error("output should have at lest on key")
+        }
+
+        const resultList = [];
+        for (const [key, value] of Object.entries(output)) {
+            resultList.push({
+                key: key,
+                value: value,
+                type: typeof value
+            });
+        }
+
+        console.debug(resultList);
         reply.code(HttpStatus.OK)
             .header('Content-Type', 'application/json')
-            .send(JSON.stringify(resultObject));
-    } catch  (e) {
-        console.debug(e.message);
-        return Boom.boomify(e);
+            .send(JSON.stringify(resultList));
+    } catch (e) {
+        console.error(e.message);
+        throw new Error(e)
     }
 };
 
@@ -40,11 +48,11 @@ const executeScript = async (request, reply) => {
 function mergeRequestData(contextVaribales, requestData) {
 
     let requestVariables = requestData.body.scriptInputMap;
-
+    console.debug(requestVariables);
     if (Array.isArray(requestVariables) && requestVariables.length > 0) {
         requestVariables.forEach(item => {
             if (typeof item === 'object' && item !== null) {
-                contextVaribales = { ...contextVaribales, ...item };
+                contextVaribales = {...contextVaribales, ...item};
             }
         });
     }
@@ -55,5 +63,5 @@ const mapToObject = (input) => {
     return Object.fromEntries(input);
 };
 
-module.exports = { executeOne: executeScript };
+module.exports = {executeOne: executeScript};
 

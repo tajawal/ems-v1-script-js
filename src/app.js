@@ -31,7 +31,6 @@ module.exports = fastify;
 
         
         // Plugins
-        fastify.register(require('fastify-boom'));
         fastify.register(v1RoutesMiddleware, { prefix: '/v1' });
 
         // Server
