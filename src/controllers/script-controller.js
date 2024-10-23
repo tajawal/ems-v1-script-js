@@ -40,7 +40,9 @@ const executeScript = async (request, reply) => {
             .send(JSON.stringify(resultList));
     } catch (e) {
         console.error(e.message);
-        throw new Error(e)
+        var error = new Error(e);
+        error.status = 400;
+        throw error
     }
 };
 
