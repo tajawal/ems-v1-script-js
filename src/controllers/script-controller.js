@@ -42,6 +42,7 @@ const executeScript = async (request, reply) => {
         console.error(e.message);
         var error = new Error(e);
         error.status = 400;
+        error.code = "4009";
         throw error
     }
 };
